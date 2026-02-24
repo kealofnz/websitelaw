@@ -5,11 +5,11 @@
 // ══════════════════════════════════════════════
 //  CONFIGURACIÓN — Reemplaza con tu URL de Apps Script
 // ══════════════════════════════════════════════
-const TRAMITES_URL = "https://script.google.com/macros/s/AKfycbxpqWcXVSEl1U8n_wHs5vRWk0moV7ijV0jiSEYWy2pseFUXIep--4Ae99fpCrqJ87t9Hw/exec";  // Ej: https://script.google.com/macros/s/ABC.../exec
-const AGENDA_URL   = "https://script.google.com/macros/s/AKfycbxpqWcXVSEl1U8n_wHs5vRWk0moV7ijV0jiSEYWy2pseFUXIep--4Ae99fpCrqJ87t9Hw/exec";  // Puede ser la misma URL con ?tab=Agenda
-const CONTACTO_URL = "https://script.google.com/macros/s/AKfycbxpqWcXVSEl1U8n_wHs5vRWk0moV7ijV0jiSEYWy2pseFUXIep--4Ae99fpCrqJ87t9Hw/exec";  // Misma URL, usa doPost para recibir formularios
+const TRAMITES_URL = "https://script.google.com/macros/s/AKfycbxpqWcXVSEl1U8n_wHs5vRWk0moV7ijV0jiSEYWy2pseFUXIep--4Ae99fpCrqJ87t9Hw/exec";
+const AGENDA_URL   = "https://script.google.com/macros/s/AKfycbxpqWcXVSEl1U8n_wHs5vRWk0moV7ijV0jiSEYWy2pseFUXIep--4Ae99fpCrqJ87t9Hw/exec";
+const CONTACTO_URL = "https://script.google.com/macros/s/AKfycbxpqWcXVSEl1U8n_wHs5vRWk0moV7ijV0jiSEYWy2pseFUXIep--4Ae99fpCrqJ87t9Hw/exec";
 
-
+// (Sin datos de demostración — los datos vienen exclusivamente de Google Sheets)
 
 // ══════════════════════════════════════════════
 //  STATE
@@ -55,15 +55,12 @@ async function loadTramites() {
   const container = document.getElementById('tramites-container');
   container.innerHTML = '<div class="empty-state"><span class="spinner"></span> Cargando...</div>';
 
-  if (!TRAMITES_URL) {
-    tramitesData = DEMO_TRAMITES;
-  } else {
-    try {
-      const res = await fetch(TRAMITES_URL + '?tab=Tramites');
-      tramitesData = await res.json();
-    } catch (e) {
-      tramitesData = DEMO_TRAMITES;
-    }
+  try {
+    const res = await fetch(TRAMITES_URL + '?tab=Tramites');
+    tramitesData = await res.json();
+  } catch (e) {
+    container.innerHTML = '<div class="empty-state"><p>⚠️ No se pudo conectar con Google Sheets.<br>Verifique la URL en app.js.</p></div>';
+    return;
   }
 
   // Poblar filtro de categorías dinámicamente
@@ -187,15 +184,12 @@ async function loadAgenda() {
   const tbody = document.getElementById('agenda-tbody');
   tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem"><span class="spinner"></span> Cargando...</td></tr>';
 
-  if (!AGENDA_URL) {
-    agendaData = DEMO_AGENDA;
-  } else {
-    try {
-      const res = await fetch(AGENDA_URL + '?tab=Agenda');
-      agendaData = await res.json();
-    } catch (e) {
-      agendaData = DEMO_AGENDA;
-    }
+  try {
+    const res = await fetch(AGENDA_URL + '?tab=Agenda');
+    agendaData = await res.json();
+  } catch (e) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem">⚠️ No se pudo conectar con Google Sheets. Verifique la URL en app.js.</td></tr>';
+    return;
   }
 
   renderAgenda();
@@ -263,8 +257,8 @@ async function enviarFormulario() {
 //  ESTADÍSTICAS (página Inicio)
 // ══════════════════════════════════════════════
 function updateStats() {
-  document.getElementById('stat-tramites').textContent = tramitesData.length;
-  document.getElementById('stat-citas').textContent    = agendaData.length || DEMO_AGENDA.length;
+  document.getElementById('stat-tramites').textContent = tramitesData.length || '—';
+  document.getElementById('stat-citas').textContent    = agendaData.length   || '—';
 
   const cats = new Set(tramitesData.map(t => t.Categoria).filter(Boolean));
   document.getElementById('stat-areas').textContent   = cats.size || '—';
