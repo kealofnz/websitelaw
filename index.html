@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Despacho Jurídico</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     NAVEGACIÓN
+══════════════════════════════════════════ -->
+<nav>
+  <div class="logo">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 4l5 2.18V11c0 3.5-2.33 6.79-5 7.93C9.33 17.79 7 14.5 7 11V7.18L12 5z"/>
+    </svg>
+    Despacho Jurídico
+  </div>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#" class="active" onclick="showPage('inicio', this)">Inicio</a></li>
+    <li><a href="#" onclick="showPage('tramites', this)">Trámites</a></li>
+    <li><a href="#" onclick="showPage('agenda', this)">Agenda</a></li>
+    <li><a href="#" onclick="showPage('contacto', this)">Contacto</a></li>
+  </ul>
+
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+
+<!-- ══════════════════════════════════════════
+     PÁGINA: INICIO
+══════════════════════════════════════════ -->
+<div class="page active" id="page-inicio">
+
+  <div class="hero">
+    <div class="hero-badge">⚖ Servicios Legales</div>
+    <h1>Asesoría legal <span>clara y confiable</span><br>para cada caso</h1>
+    <p>Consulte los trámites disponibles, revise la agenda de citas y contáctenos directamente desde esta plataforma.</p>
+    <div class="hero-ctas">
+      <a href="#" class="btn btn-primary" onclick="showPage('tramites', null)">Ver Trámites</a>
+      <a href="#" class="btn btn-outline" onclick="showPage('contacto', null)">Solicitar Consulta</a>
+    </div>
+  </div>
+
+  <section>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem;">
+      <div class="card" style="text-align:center; padding:2rem 1.5rem;">
+        <div style="font-size:2rem; margin-bottom:.5rem">📋</div>
+        <div style="font-family:Arial; font-size:.85rem; color:var(--muted); margin-bottom:.3rem">Trámites disponibles</div>
+        <div id="stat-tramites" style="font-size:2rem; color:var(--gold)">—</div>
+      </div>
+      <div class="card" style="text-align:center; padding:2rem 1.5rem;">
+        <div style="font-size:2rem; margin-bottom:.5rem">📅</div>
+        <div style="font-family:Arial; font-size:.85rem; color:var(--muted); margin-bottom:.3rem">Citas próximas</div>
+        <div id="stat-citas" style="font-size:2rem; color:var(--gold)">—</div>
+      </div>
+      <div class="card" style="text-align:center; padding:2rem 1.5rem;">
+        <div style="font-size:2rem; margin-bottom:.5rem">⚖️</div>
+        <div style="font-family:Arial; font-size:.85rem; color:var(--muted); margin-bottom:.3rem">Áreas de práctica</div>
+        <div id="stat-areas" style="font-size:2rem; color:var(--gold)">—</div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page-inicio -->
+
+
+<!-- ══════════════════════════════════════════
+     PÁGINA: TRÁMITES
+══════════════════════════════════════════ -->
+<div class="page" id="page-tramites">
+  <section>
+    <div class="section-label">Servicios Legales</div>
+    <div class="section-title">Trámites y Procesos</div>
+    <div class="section-sub">Consulte los trámites disponibles y solicite el que necesite. Datos gestionados desde Excel.</div>
+
+    <div class="toolbar">
+      <input class="search-input" id="searchTramites" placeholder="🔍 Buscar trámite..." oninput="renderTramites()">
+      <select class="filter-select" id="filterCategoria" onchange="renderTramites()">
+        <option value="">Todas las categorías</option>
+      </select>
+      <button class="btn btn-outline" onclick="loadTramites()">⟳ Actualizar</button>
+    </div>
+
+    <div id="tramites-container" class="cards-grid"></div>
+  </section>
+</div><!-- /page-tramites -->
+
+
+<!-- ══════════════════════════════════════════
+     MODAL — Solicitar trámite
+══════════════════════════════════════════ -->
+<div id="modal-overlay" class="modal-overlay">
+  <div class="modal-box">
+    <button class="modal-close" onclick="cerrarModal()">✕</button>
+    <div class="section-label" style="margin-bottom:.3rem">Solicitud</div>
+    <h2 id="modal-titulo" class="modal-title"></h2>
+
+    <div class="modal-fields">
+      <div class="form-group">
+        <label>Nombre completo *</label>
+        <input type="text" id="m-nombre" placeholder="Juan Pérez">
+      </div>
+      <div class="form-group">
+        <label>Correo electrónico *</label>
+        <input type="email" id="m-email" placeholder="correo@ejemplo.com">
+      </div>
+      <div class="form-group">
+        <label>Teléfono</label>
+        <input type="tel" id="m-tel" placeholder="+504 0000-0000">
+      </div>
+      <div class="form-group">
+        <label>Mensaje / consulta adicional</label>
+        <textarea id="m-mensaje" style="min-height:80px" placeholder="Puede agregar detalles adicionales..."></textarea>
+      </div>
+      <button class="btn btn-primary" style="width:100%; justify-content:center; padding:.8rem;"
+        onclick="enviarSolicitudTramite()">
+        Enviar solicitud →
+      </button>
+    </div>
+  </div>
+</div><!-- /modal -->
+
+
+<!-- ══════════════════════════════════════════
+     PÁGINA: AGENDA
+══════════════════════════════════════════ -->
+<div class="page" id="page-agenda">
+  <section>
+    <div class="section-label">Calendario</div>
+    <div class="section-title">Agenda de Citas</div>
+    <div class="section-sub">Próximas citas registradas en el sistema.</div>
+
+    <div class="toolbar">
+      <input class="search-input" id="searchAgenda" placeholder="🔍 Buscar cita..." oninput="renderAgenda()">
+      <select class="filter-select" id="filterTipo" onchange="renderAgenda()">
+        <option value="">Todos los tipos</option>
+        <option value="Consulta">Consulta</option>
+        <option value="Audiencia">Audiencia</option>
+        <option value="Reunión">Reunión</option>
+      </select>
+      <button class="btn btn-outline" onclick="loadAgenda()">⟳ Actualizar</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Cliente</th>
+            <th>Tipo</th>
+            <th>Abogado</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody id="agenda-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+</div><!-- /page-agenda -->
+
+
+<!-- ══════════════════════════════════════════
+     PÁGINA: CONTACTO
+══════════════════════════════════════════ -->
+<div class="page" id="page-contacto">
+  <section>
+    <div class="section-label">Contacto</div>
+    <div class="section-title">Solicitar Consulta</div>
+    <div class="section-sub">Complete el formulario y nos comunicaremos a la brevedad.</div>
+
+    <div class="form-card">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nombre completo *</label>
+          <input type="text" id="c-nombre" placeholder="Juan Pérez">
+        </div>
+        <div class="form-group">
+          <label>Teléfono *</label>
+          <input type="tel" id="c-tel" placeholder="+504 0000-0000">
+        </div>
+        <div class="form-group">
+          <label>Correo electrónico *</label>
+          <input type="email" id="c-email" placeholder="correo@ejemplo.com">
+        </div>
+        <div class="form-group">
+          <label>Tipo de asunto</label>
+          <select id="c-tipo">
+            <option>Civil</option>
+            <option>Laboral</option>
+            <option>Penal</option>
+            <option>Familiar</option>
+            <option>Mercantil</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Descripción del caso *</label>
+          <textarea id="c-mensaje" placeholder="Describa brevemente su situación legal..."></textarea>
+        </div>
+        <div class="form-group full">
+          <button class="btn btn-primary"
+            style="width:100%; justify-content:center; padding:.8rem;"
+            onclick="enviarFormulario()">
+            Enviar solicitud →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- INSTRUCCIONES DE CONEXIÓN -->
+    <div style="max-width:680px; margin:2.5rem auto 0;">
+      <hr class="divider" style="margin-bottom:2rem">
+      <div class="section-label">Configuración</div>
+      <div class="section-title" style="font-size:1.2rem; margin-bottom:1rem">¿Cómo conectar tu Excel / Google Sheet?</div>
+
+      <div class="instructions">
+        <p style="margin-bottom:1rem; color:var(--text)"><strong>Paso 1 — Publicar la hoja como Web App:</strong></p>
+        <ol>
+          <li>Abre tu Google Sheet y ve a <strong style="color:var(--text)">Extensiones → Apps Script</strong></li>
+          <li>Pega el código de Apps Script que aparece más abajo</li>
+          <li>Haz clic en <strong style="color:var(--text)">Implementar → Nueva implementación</strong></li>
+          <li>Elige tipo: <strong style="color:var(--text)">Aplicación web</strong>, acceso: <em>Cualquier usuario</em></li>
+          <li>Copia la URL generada</li>
+        </ol>
+
+        <p style="margin-bottom:.8rem; color:var(--text)"><strong>Paso 2 — Pegar la URL en app.js:</strong></p>
+        <div class="code-block">// Al inicio de app.js reemplaza:
+const TRAMITES_URL = "TU_URL_APPS_SCRIPT_AQUI";
+const AGENDA_URL   = "TU_URL_APPS_SCRIPT_AQUI";
+const CONTACTO_URL = "TU_URL_APPS_SCRIPT_AQUI";</div>
+
+        <p style="margin-bottom:.8rem; color:var(--text)"><strong>Código Apps Script a pegar:</strong></p>
+        <div class="code-block">function doGet(e) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet();
+  const tab   = e.parameter.tab || "Tramites";
+  const data  = sheet.getSheetByName(tab).getDataRange().getValues();
+  const keys  = data[0];
+  const rows  = data.slice(1).map(r =>
+    Object.fromEntries(keys.map((k,i) => [k, r[i]]))
+  );
+  return ContentService
+    .createTextOutput(JSON.stringify(rows))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  const body  = JSON.parse(e.postData.contents);
+  const sheet = SpreadsheetApp.getActiveSpreadsheet()
+                  .getSheetByName("Contacto");
+  sheet.appendRow([
+    new Date(), body.nombre, body.email,
+    body.telefono, body.tipo, body.mensaje
+  ]);
+  return ContentService
+    .createTextOutput(JSON.stringify({ok:true}))
+    .setMimeType(ContentService.MimeType.JSON);
+}</div>
+
+        <p>Las columnas de tu Excel deben llamarse exactamente:
+          <strong style="color:var(--text)">Nombre, Categoria, Descripcion, Requisitos</strong>
+          (pestaña <strong style="color:var(--text)">Tramites</strong>) y
+          <strong style="color:var(--text)">Fecha, Hora, Cliente, Tipo, Abogado, Estado</strong>
+          (pestaña <strong style="color:var(--text)">Agenda</strong>).
+          Las solicitudes del botón "Solicitar trámite" se guardan en la pestaña
+          <strong style="color:var(--text)">Contacto</strong>.
+        </p>
+      </div>
+    </div>
+
+  </section>
+</div><!-- /page-contacto -->
+
+
+<!-- ══════════════════════════════════════════
+     TOAST & FOOTER
+══════════════════════════════════════════ -->
+<div class="toast" id="toast"></div>
+
+<footer>
+  &copy; 2025 Despacho Jurídico &mdash; Todos los derechos reservados
+</footer>
+
+<!-- JavaScript externo -->
+<script src="app.js"></script>
+
+</body>
+</html>
