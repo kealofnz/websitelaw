@@ -5,9 +5,9 @@
 // ══════════════════════════════════════════════
 //  CONFIGURACIÓN — Reemplaza con tu URL de Apps Script
 // ══════════════════════════════════════════════
-const TRAMITES_URL = "";  // Ej: https://script.google.com/macros/s/ABC.../exec
-const AGENDA_URL   = "";  // Puede ser la misma URL con ?tab=Agenda
-const CONTACTO_URL = "";  // Misma URL, usa doPost para recibir formularios
+const TRAMITES_URL = "https://script.google.com/macros/s/AKfycbxpqWcXVSEl1U8n_wHs5vRWk0moV7ijV0jiSEYWy2pseFUXIep--4Ae99fpCrqJ87t9Hw/exec";  // Ej: https://script.google.com/macros/s/ABC.../exec
+const AGENDA_URL   = "https://script.google.com/macros/s/AKfycbxpqWcXVSEl1U8n_wHs5vRWk0moV7ijV0jiSEYWy2pseFUXIep--4Ae99fpCrqJ87t9Hw/exec";  // Puede ser la misma URL con ?tab=Agenda
+const CONTACTO_URL = "https://script.google.com/macros/s/AKfycbxpqWcXVSEl1U8n_wHs5vRWk0moV7ijV0jiSEYWy2pseFUXIep--4Ae99fpCrqJ87t9Hw/exec";  // Misma URL, usa doPost para recibir formularios
 
 // ══════════════════════════════════════════════
 //  DATOS DE DEMOSTRACIÓN
