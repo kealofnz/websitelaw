@@ -9,57 +9,7 @@ const TRAMITES_URL = "https://script.google.com/macros/s/AKfycbxpqWcXVSEl1U8n_wH
 const AGENDA_URL   = "https://script.google.com/macros/s/AKfycbxpqWcXVSEl1U8n_wHs5vRWk0moV7ijV0jiSEYWy2pseFUXIep--4Ae99fpCrqJ87t9Hw/exec";  // Puede ser la misma URL con ?tab=Agenda
 const CONTACTO_URL = "https://script.google.com/macros/s/AKfycbxpqWcXVSEl1U8n_wHs5vRWk0moV7ijV0jiSEYWy2pseFUXIep--4Ae99fpCrqJ87t9Hw/exec";  // Misma URL, usa doPost para recibir formularios
 
-// ══════════════════════════════════════════════
-//  DATOS DE DEMOSTRACIÓN
-//  (se usan automáticamente si no hay URL configurada)
-//  Columnas Excel → Nombre | Categoria | Descripcion | Requisitos
-// ══════════════════════════════════════════════
-const DEMO_TRAMITES = [
-  {
-    Nombre: "Constitución de Sociedad Mercantil",
-    Categoria: "Mercantil",
-    Descripcion: "Redacción y legalización de escritura pública para la constitución de una sociedad anónima o de responsabilidad limitada ante el Registro Mercantil.",
-    Requisitos: "DPI de los socios, acta constitutiva borrador, depósito de capital inicial, comprobante de domicilio fiscal, nombre propuesto de la empresa."
-  },
-  {
-    Nombre: "Demanda por Incumplimiento de Contrato",
-    Categoria: "Civil",
-    Descripcion: "Representación legal en procesos civiles derivados del incumplimiento de contratos de compraventa, arrendamiento o prestación de servicios.",
-    Requisitos: "Copia del contrato original, evidencia del incumplimiento (correos, documentos), DPI del demandante, historial de pagos o comunicaciones."
-  },
-  {
-    Nombre: "Despido Injustificado / Prestaciones Laborales",
-    Categoria: "Laboral",
-    Descripcion: "Gestión y presentación de demanda ante los tribunales laborales para reclamar prestaciones no pagadas, indemnización por despido o beneficios laborales.",
-    Requisitos: "Carta de despido o constancia laboral, colillas de pago, DPI, contrato de trabajo (si existe), tiempo laborado."
-  },
-  {
-    Nombre: "Proceso de Divorcio",
-    Categoria: "Familiar",
-    Descripcion: "Tramitación de divorcio por mutuo acuerdo o contencioso, incluyendo acuerdos de custodia, pensión alimenticia y reparto de bienes.",
-    Requisitos: "Acta de matrimonio original, DPI de ambos cónyuges, actas de nacimiento de hijos (si aplica), inventario de bienes."
-  },
-  {
-    Nombre: "Defensa Penal",
-    Categoria: "Penal",
-    Descripcion: "Asesoría y representación legal en procesos penales, desde la etapa preparatoria hasta el juicio oral, garantizando el debido proceso.",
-    Requisitos: "Acta de imputación o acusación, DPI del imputado, relato de los hechos, información sobre testigos o pruebas de descargo."
-  },
-  {
-    Nombre: "Registro de Marca Comercial",
-    Categoria: "Mercantil",
-    Descripcion: "Gestión integral del registro de marca, logotipo o nombre comercial ante la oficina de Propiedad Intelectual para proteger su identidad empresarial.",
-    Requisitos: "Nombre o logo a registrar (archivo digital), descripción de productos/servicios, DPI o RUT del solicitante, comprobante de pago de tasas."
-  },
-];
 
-const DEMO_AGENDA = [
-  { Fecha:"2025-03-01", Hora:"09:00", Cliente:"María González",  Tipo:"Consulta",  Abogado:"Lic. Hernández", Estado:"Confirmada" },
-  { Fecha:"2025-03-01", Hora:"11:30", Cliente:"Roberto Mejía",   Tipo:"Audiencia", Abogado:"Lic. Ramírez",   Estado:"Pendiente"  },
-  { Fecha:"2025-03-03", Hora:"10:00", Cliente:"Empresa S.A.",    Tipo:"Reunión",   Abogado:"Lic. Hernández", Estado:"Confirmada" },
-  { Fecha:"2025-03-04", Hora:"14:00", Cliente:"Carlos Medina",   Tipo:"Audiencia", Abogado:"Lic. Hernández", Estado:"Confirmada" },
-  { Fecha:"2025-03-06", Hora:"09:30", Cliente:"Nuevo Cliente",   Tipo:"Consulta",  Abogado:"Lic. Ramírez",   Estado:"Pendiente"  },
-];
 
 // ══════════════════════════════════════════════
 //  STATE
