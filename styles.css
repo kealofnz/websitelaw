@@ -600,3 +600,249 @@ footer a { color: var(--gold); text-decoration: none; }
 @media (max-width: 600px) {
   .form-grid { grid-template-columns: 1fr; }
 }
+
+
+/* ══════════════════════════════════════════
+   SKELETON LOADING
+══════════════════════════════════════════ */
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+
+.skel {
+  background: linear-gradient(90deg,
+    var(--surface2) 25%,
+    var(--border)   50%,
+    var(--surface2) 75%
+  );
+  background-size: 600px 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-radius: 5px;
+}
+
+.skeleton-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  pointer-events: none;
+  min-height: 260px;
+}
+
+.skeleton-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.skel-icon  { width: 28px; height: 28px; border-radius: 6px; flex-shrink: 0; }
+.skel-title { flex: 1; height: 14px; }
+.skel-badge { width: 60px; height: 20px; border-radius: 999px; }
+.skel-line  { height: 11px; width: 100%; }
+.skel-line.short { width: 65%; }
+.skel-box   { height: 64px; border-radius: 7px; }
+.skel-btn   { height: 34px; width: 130px; border-radius: 7px; margin-top: auto; }
+
+/* Skeleton tabla */
+.skeleton-row td { padding: 0.9rem 1rem; }
+.skeleton-row .skel-line { height: 10px; }
+
+/* ══════════════════════════════════════════
+   TARJETAS DE TRÁMITE — tamaño fijo
+══════════════════════════════════════════ */
+.tramite-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  /* Altura fija para uniformidad */
+  min-height: 300px;
+  max-height: 300px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Gradiente inferior para indicar contenido truncado */
+.tramite-card::after {
+  content: '';
+  position: absolute;
+  bottom: 56px; /* justo encima de los botones */
+  left: 0; right: 0;
+  height: 28px;
+  background: linear-gradient(transparent, var(--surface));
+  pointer-events: none;
+}
+
+.card-icon {
+  font-size: 1.35rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.card-desc {
+  font-family: 'Arial', sans-serif;
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.65;
+  margin: 0;
+  /* Limitar líneas visibles */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-requisitos {
+  background: var(--surface2);
+  border-radius: 7px;
+  padding: 0.75rem 0.9rem;
+  flex-shrink: 0;
+}
+
+.card-requisitos ul {
+  font-family: 'Arial', sans-serif;
+  font-size: 0.79rem;
+  color: var(--text);
+  padding-left: 1rem;
+  margin: 0;
+  line-height: 1.75;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 0.5rem;
+  position: relative;
+  z-index: 1;
+  background: var(--surface); /* cubre el gradiente */
+}
+
+/* Botón "Ver más" inline */
+.btn-ver-mas {
+  background: none;
+  border: none;
+  color: var(--gold);
+  font-family: 'Arial', sans-serif;
+  font-size: 0.78rem;
+  cursor: pointer;
+  padding: 0 2px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+}
+.btn-ver-mas:hover { color: var(--gold-light); }
+
+/* Botones pequeños en tarjeta */
+.btn-sm {
+  padding: 0.45rem 1rem;
+  font-size: 0.8rem;
+}
+
+.btn-ghost-sm {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 0.45rem 0.9rem;
+  font-size: 0.8rem;
+  border-radius: 7px;
+  cursor: pointer;
+  font-family: 'Arial', sans-serif;
+  transition: all 0.2s;
+}
+.btn-ghost-sm:hover { color: var(--text); border-color: var(--muted); }
+
+/* ══════════════════════════════════════════
+   MODAL DETALLE (Ver más)
+══════════════════════════════════════════ */
+.modal-detalle-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  width: 100%;
+  max-width: 560px;
+  padding: 2rem;
+  position: relative;
+  max-height: 88vh;
+  overflow-y: auto;
+  /* Scroll suave */
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar personalizado dentro del modal */
+.modal-detalle-box::-webkit-scrollbar { width: 4px; }
+.modal-detalle-box::-webkit-scrollbar-track { background: transparent; }
+.modal-detalle-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.detalle-seccion {
+  margin-bottom: 1.2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--border);
+}
+.detalle-seccion:last-of-type { border-bottom: none; margin-bottom: 0; }
+
+/* ══════════════════════════════════════════
+   PAGINACIÓN
+══════════════════════════════════════════ */
+#paginacion {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.paginacion-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pag-btn {
+  font-family: 'Arial', sans-serif;
+  font-size: 0.8rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.pag-btn:hover:not(:disabled) { border-color: var(--gold); color: var(--gold); }
+.pag-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.pag-num {
+  font-family: 'Arial', sans-serif;
+  font-size: 0.82rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.pag-num:hover { border-color: var(--gold); color: var(--gold); }
+.pag-num.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #000;
+  font-weight: bold;
+}
+
+.pag-dots {
+  font-family: 'Arial', sans-serif;
+  font-size: 0.85rem;
+  color: var(--muted);
+  padding: 0 4px;
+}
+
+.pag-info {
+  font-family: 'Arial', sans-serif;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
