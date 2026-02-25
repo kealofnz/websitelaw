@@ -80,16 +80,29 @@
     <div class="section-sub">Consulte los trámites disponibles y solicite el que necesite. Datos gestionados desde Excel.</div>
 
     <div class="toolbar">
-      <input class="search-input" id="searchTramites" placeholder="🔍 Buscar trámite..." oninput="renderTramites()">
-      <select class="filter-select" id="filterCategoria" onchange="renderTramites()">
+      <input class="search-input" id="searchTramites" placeholder="🔍 Buscar trámite..." oninput="filtrarYPaginar()">
+      <select class="filter-select" id="filterCategoria" onchange="filtrarYPaginar()">
         <option value="">Todas las categorías</option>
       </select>
       <button class="btn btn-outline" onclick="loadTramites()">⟳ Actualizar</button>
     </div>
 
     <div id="tramites-container" class="cards-grid"></div>
+    <div id="paginacion"></div>
   </section>
 </div><!-- /page-tramites -->
+
+
+<!-- ══════════════════════════════════════════
+     MODAL — Ver detalle completo del trámite
+══════════════════════════════════════════ -->
+<div id="modal-detalle" class="modal-overlay">
+  <div class="modal-detalle-box">
+    <button class="modal-close" onclick="cerrarDetalle()">✕</button>
+    <div class="section-label" style="margin-bottom:.4rem">Detalle del trámite</div>
+    <div id="detalle-content"></div>
+  </div>
+</div>
 
 
 <!-- ══════════════════════════════════════════
@@ -214,7 +227,7 @@
       </div>
     </div>
 
-
+ 
 
   </section>
 </div><!-- /page-contacto -->
