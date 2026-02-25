@@ -181,18 +181,20 @@ function buildCard(t, idx) {
 
   return (
     '<div class="card tramite-card">' +
-      '<div class="card-header" style="align-items:center;">' +
-        '<div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">' +
-          '<span class="card-icon">' + icon + '</span>' +
-          '<div class="card-title">' + t.Nombre + '</div>' +
+      '<div class="card-body">' +
+        '<div class="card-header" style="align-items:center;margin-bottom:0;">' +
+          '<div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">' +
+            '<span class="card-icon">' + icon + '</span>' +
+            '<div class="card-title">' + t.Nombre + '</div>' +
+          '</div>' +
+          (t.Categoria ? '<span class="badge badge-active">' + t.Categoria + '</span>' : '') +
         '</div>' +
-        (t.Categoria ? '<span class="badge badge-active">' + t.Categoria + '</span>' : '') +
+        descHTML +
+        reqHTML +
       '</div>' +
-      descHTML +
-      reqHTML +
       '<div class="card-actions">' +
         '<button class="btn btn-ghost-sm" onclick="abrirDetalle(' + idx + ')">Ver detalle</button>' +
-        '<button class="btn btn-primary btn-sm" onclick="abrirModal(\'' + nombreEscaped + '\')">Solicitar →</button>' +
+        '<button class="btn btn-primary btn-sm" onclick="abrirModal(\\'' + nombreEscaped + '\\')">' + 'Solicitar →</button>' +
       '</div>' +
     '</div>'
   );
