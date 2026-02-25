@@ -653,14 +653,13 @@ footer a { color: var(--gold); text-decoration: none; }
 .tramite-card {
   display: flex;
   flex-direction: column;
-  height: 300px;        /* altura uniforme */
+  padding: 0 !important;
+  height: 300px;
   overflow: hidden;
   position: relative;
   gap: 0;
-  padding: 0;           /* el padding lo maneja card-body y card-actions */
 }
 
-/* Zona de contenido — se recorta, nunca empuja los botones */
 .card-body {
   flex: 1;
   overflow: hidden;
@@ -668,7 +667,6 @@ footer a { color: var(--gold); text-decoration: none; }
   flex-direction: column;
   gap: 0.75rem;
   padding: 1.2rem 1.2rem 0.5rem;
-  /* Fade al borde inferior para indicar que hay más */
   mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
 }
@@ -717,7 +715,6 @@ footer a { color: var(--gold); text-decoration: none; }
   padding: 0.65rem 1.2rem 1.2rem;
   border-top: 1px solid var(--border);
   background: var(--surface);
-  position: relative;
   z-index: 2;
 }
 
