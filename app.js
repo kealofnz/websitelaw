@@ -34,11 +34,22 @@ const CATEGORIA_ICONS = {
 // ══════════════════════════════════════════════
 //  NAVEGACIÓN
 // ══════════════════════════════════════════════
-function showPage(id, anchor) {
+function showPage(id, anchor, event) {
+  // Prevenir que href="#" haga scroll o modifique la URL
+  if (event) event.preventDefault();
+
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
+
   document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-  if (anchor) anchor.classList.add('active');
+  // Si anchor es un elemento del DOM lo marcamos; si no, buscamos por id de página
+  if (anchor && anchor.classList) {
+    anchor.classList.add('active');
+  } else {
+    const navLink = document.querySelector('.nav-links a[data-page="' + id + '"]');
+    if (navLink) navLink.classList.add('active');
+  }
+
   document.getElementById('navLinks').classList.remove('open');
   window.scrollTo(0, 0);
   if (id === 'tramites' && tramitesData.length === 0) loadTramites();
