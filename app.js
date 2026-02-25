@@ -3,19 +3,23 @@
    ═══════════════════════════════════════════ */
 
 // ══════════════════════════════════════════════
-//  CONFIGURACIÓN — Reemplaza con tu URL de Apps Script
+//  CONFIGURACIÓN
 // ══════════════════════════════════════════════
 const TRAMITES_URL = "https://script.google.com/macros/s/AKfycbxpqWcXVSEl1U8n_wHs5vRWk0moV7ijV0jiSEYWy2pseFUXIep--4Ae99fpCrqJ87t9Hw/exec";
 const AGENDA_URL   = "https://script.google.com/macros/s/AKfycbxpqWcXVSEl1U8n_wHs5vRWk0moV7ijV0jiSEYWy2pseFUXIep--4Ae99fpCrqJ87t9Hw/exec";
 const CONTACTO_URL = "https://script.google.com/macros/s/AKfycbxpqWcXVSEl1U8n_wHs5vRWk0moV7ijV0jiSEYWy2pseFUXIep--4Ae99fpCrqJ87t9Hw/exec";
 
-// (Sin datos de demostración — los datos vienen exclusivamente de Google Sheets)
+const CARDS_PER_PAGE = 9;    // Trámites por página
+const DESC_MAX_CHARS = 120;  // Caracteres antes de "Ver más" en descripción
+const REQ_MAX_ITEMS  = 3;    // Requisitos visibles antes de "Ver más"
 
 // ══════════════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════════════
 let tramitesData        = [];
 let agendaData          = [];
+let tramitesFiltrados   = [];
+let paginaActual        = 1;
 let tramiteSeleccionado = '';
 
 const CATEGORIA_ICONS = {
@@ -28,18 +32,15 @@ const CATEGORIA_ICONS = {
 };
 
 // ══════════════════════════════════════════════
-//  NAVIGATION
+//  NAVEGACIÓN
 // ══════════════════════════════════════════════
 function showPage(id, anchor) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
-
   document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
   if (anchor) anchor.classList.add('active');
-
   document.getElementById('navLinks').classList.remove('open');
   window.scrollTo(0, 0);
-
   if (id === 'tramites' && tramitesData.length === 0) loadTramites();
   if (id === 'agenda'   && agendaData.length   === 0) loadAgenda();
 }
@@ -49,17 +50,39 @@ function toggleMenu() {
 }
 
 // ══════════════════════════════════════════════
-//  TRÁMITES — Carga y renderizado
+//  SKELETON LOADING
+// ══════════════════════════════════════════════
+function mostrarSkeleton(containerId, cantidad) {
+  cantidad = cantidad || CARDS_PER_PAGE;
+  var html = '';
+  for (var i = 0; i < cantidad; i++) {
+    html += '<div class="card skeleton-card">' +
+      '<div class="skeleton-header">' +
+        '<div class="skel skel-icon"></div>' +
+        '<div class="skel skel-title"></div>' +
+        '<div class="skel skel-badge"></div>' +
+      '</div>' +
+      '<div class="skel skel-line"></div>' +
+      '<div class="skel skel-line short"></div>' +
+      '<div class="skel skel-box"></div>' +
+      '<div class="skel skel-btn"></div>' +
+    '</div>';
+  }
+  document.getElementById(containerId).innerHTML = html;
+}
+
+// ══════════════════════════════════════════════
+//  TRÁMITES — Carga
 // ══════════════════════════════════════════════
 async function loadTramites() {
-  const container = document.getElementById('tramites-container');
-  container.innerHTML = '<div class="empty-state"><span class="spinner"></span> Cargando...</div>';
+  mostrarSkeleton('tramites-container');
 
   try {
     const res = await fetch(TRAMITES_URL + '?tab=Tramites');
     tramitesData = await res.json();
   } catch (e) {
-    container.innerHTML = '<div class="empty-state"><p>⚠️ No se pudo conectar con Google Sheets.<br>Verifique la URL en app.js.</p></div>';
+    document.getElementById('tramites-container').innerHTML =
+      '<div class="empty-state"><p>⚠️ No se pudo conectar con Google Sheets.<br>Verifique la URL en app.js.</p></div>';
     return;
   }
 
@@ -67,71 +90,223 @@ async function loadTramites() {
   const cats = [...new Set(tramitesData.map(t => t.Categoria).filter(Boolean))].sort();
   const sel  = document.getElementById('filterCategoria');
   sel.innerHTML = '<option value="">Todas las categorías</option>'
-    + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+    + cats.map(c => '<option value="' + c + '">' + c + '</option>').join('');
 
   updateStats();
-  renderTramites();
+  filtrarYPaginar();
 }
 
-function renderTramites() {
+// ══════════════════════════════════════════════
+//  TRÁMITES — Filtrar, paginar y renderizar
+// ══════════════════════════════════════════════
+function filtrarYPaginar() {
   const q   = document.getElementById('searchTramites').value.toLowerCase();
   const cat = document.getElementById('filterCategoria').value;
 
-  const list = tramitesData.filter(t => {
+  tramitesFiltrados = tramitesData.filter(function(t) {
     const text = (t.Nombre + t.Categoria + t.Descripcion + t.Requisitos).toLowerCase();
     return (!q || text.includes(q)) && (!cat || t.Categoria === cat);
   });
 
-  const container = document.getElementById('tramites-container');
+  paginaActual = 1;
+  renderTramites();
+  renderPaginacion();
+}
 
-  if (!list.length) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2
-                   M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-        </svg>
-        <p>No se encontraron trámites</p>
-      </div>`;
+function renderTramites() {
+  const container  = document.getElementById('tramites-container');
+  const inicio     = (paginaActual - 1) * CARDS_PER_PAGE;
+  const pagina     = tramitesFiltrados.slice(inicio, inicio + CARDS_PER_PAGE);
+
+  if (!pagina.length) {
+    container.innerHTML =
+      '<div class="empty-state">' +
+        '<svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" style="opacity:.2;margin-bottom:1rem">' +
+          '<path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>' +
+        '</svg>' +
+        '<p>No se encontraron trámites</p>' +
+      '</div>';
     return;
   }
 
-  container.innerHTML = list.map(t => {
-    const icon    = CATEGORIA_ICONS[t.Categoria] || CATEGORIA_ICONS.default;
-    const reqList = t.Requisitos
-      ? t.Requisitos.split(',').map(r => `<li style="margin-bottom:3px">${r.trim()}</li>`).join('')
-      : '';
-
-    return `
-    <div class="card" style="display:flex;flex-direction:column;gap:1rem;">
-      <div class="card-header" style="align-items:center;">
-        <div style="display:flex;align-items:center;gap:10px;flex:1;">
-          <span style="font-size:1.4rem;line-height:1;">${icon}</span>
-          <div class="card-title" style="font-size:.93rem;line-height:1.4;">${t.Nombre}</div>
-        </div>
-        ${t.Categoria ? `<span class="badge badge-active" style="flex-shrink:0;">${t.Categoria}</span>` : ''}
-      </div>
-
-      ${t.Descripcion ? `<p style="font-family:Arial,sans-serif;font-size:.82rem;color:var(--muted);line-height:1.65;margin:0;">${t.Descripcion}</p>` : ''}
-
-      ${reqList ? `
-      <div style="background:var(--surface2);border-radius:7px;padding:.85rem 1rem;">
-        <div class="meta-label" style="margin-bottom:.5rem;">📎 Requisitos</div>
-        <ul style="font-family:Arial,sans-serif;font-size:.8rem;color:var(--text);padding-left:1rem;margin:0;line-height:1.7;">
-          ${reqList}
-        </ul>
-      </div>` : ''}
-
-      <button class="btn btn-primary" style="align-self:flex-start;margin-top:auto;"
-        onclick="abrirModal('${t.Nombre.replace(/'/g, "\\'")}')">
-        Solicitar este trámite →
-      </button>
-    </div>`;
+  container.innerHTML = pagina.map(function(t, i) {
+    return buildCard(t, inicio + i);
   }).join('');
+
+  // Animación de entrada escalonada
+  container.querySelectorAll('.tramite-card').forEach(function(card, i) {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(14px)';
+    setTimeout(function() {
+      card.style.transition = 'opacity 0.28s ease, transform 0.28s ease';
+      card.style.opacity    = '1';
+      card.style.transform  = 'translateY(0)';
+    }, i * 60);
+  });
+}
+
+function buildCard(t, idx) {
+  const icon = CATEGORIA_ICONS[t.Categoria] || CATEGORIA_ICONS.default;
+
+  // ── Descripción con truncado ──
+  const desc      = (t.Descripcion || '').trim();
+  const descCorta = desc.length > DESC_MAX_CHARS;
+  var descHTML    = '';
+  if (desc) {
+    const texto = descCorta ? desc.substring(0, DESC_MAX_CHARS) + '…' : desc;
+    const boton = descCorta
+      ? '<button class="btn-ver-mas" onclick="abrirDetalle(' + idx + ')">Ver más</button>'
+      : '';
+    descHTML = '<p class="card-desc">' + texto + boton + '</p>';
+  }
+
+  // ── Requisitos con truncado ──
+  const reqs      = t.Requisitos ? t.Requisitos.split(',').map(function(r) { return r.trim(); }).filter(Boolean) : [];
+  const reqCortos = reqs.length > REQ_MAX_ITEMS;
+  var reqHTML     = '';
+  if (reqs.length) {
+    const items = reqs.slice(0, REQ_MAX_ITEMS).map(function(r) { return '<li>' + r + '</li>'; }).join('');
+    const masBtn = reqCortos
+      ? '<button class="btn-ver-mas" onclick="abrirDetalle(' + idx + ')">+' + (reqs.length - REQ_MAX_ITEMS) + ' más…</button>'
+      : '';
+    reqHTML =
+      '<div class="card-requisitos">' +
+        '<div class="meta-label" style="margin-bottom:.45rem">📎 Requisitos</div>' +
+        '<ul>' + items + '</ul>' +
+        masBtn +
+      '</div>';
+  }
+
+  const nombreEscaped = t.Nombre.replace(/'/g, "\\'");
+
+  return (
+    '<div class="card tramite-card">' +
+      '<div class="card-header" style="align-items:center;">' +
+        '<div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">' +
+          '<span class="card-icon">' + icon + '</span>' +
+          '<div class="card-title">' + t.Nombre + '</div>' +
+        '</div>' +
+        (t.Categoria ? '<span class="badge badge-active">' + t.Categoria + '</span>' : '') +
+      '</div>' +
+      descHTML +
+      reqHTML +
+      '<div class="card-actions">' +
+        '<button class="btn btn-ghost-sm" onclick="abrirDetalle(' + idx + ')">Ver detalle</button>' +
+        '<button class="btn btn-primary btn-sm" onclick="abrirModal(\'' + nombreEscaped + '\')">Solicitar →</button>' +
+      '</div>' +
+    '</div>'
+  );
 }
 
 // ══════════════════════════════════════════════
-//  MODAL — Solicitar trámite
+//  PAGINACIÓN
+// ══════════════════════════════════════════════
+function renderPaginacion() {
+  const total = Math.ceil(tramitesFiltrados.length / CARDS_PER_PAGE);
+  const el    = document.getElementById('paginacion');
+
+  if (total <= 1) { el.innerHTML = ''; return; }
+
+  const info = '<span class="pag-info">Página ' + paginaActual + ' de ' + total +
+    ' &nbsp;·&nbsp; ' + tramitesFiltrados.length + ' trámites</span>';
+
+  const prev = '<button class="pag-btn" onclick="irPagina(' + (paginaActual - 1) + ')"' +
+    (paginaActual === 1 ? ' disabled' : '') + '>← Anterior</button>';
+
+  const next = '<button class="pag-btn" onclick="irPagina(' + (paginaActual + 1) + ')"' +
+    (paginaActual === total ? ' disabled' : '') + '>Siguiente →</button>';
+
+  const rango = paginasVisibles(paginaActual, total);
+  var nums = '';
+  if (rango[0] > 1) nums += '<button class="pag-num" onclick="irPagina(1)">1</button>';
+  if (rango[0] > 2) nums += '<span class="pag-dots">…</span>';
+  rango.forEach(function(n) {
+    nums += '<button class="pag-num' + (n === paginaActual ? ' active' : '') +
+      '" onclick="irPagina(' + n + ')">' + n + '</button>';
+  });
+  if (rango[rango.length - 1] < total - 1) nums += '<span class="pag-dots">…</span>';
+  if (rango[rango.length - 1] < total)
+    nums += '<button class="pag-num" onclick="irPagina(' + total + ')">' + total + '</button>';
+
+  el.innerHTML = '<div class="paginacion-wrap">' + prev + nums + next + '</div>' + info;
+}
+
+function paginasVisibles(actual, total) {
+  const delta = 2;
+  const rango = [];
+  for (var i = Math.max(1, actual - delta); i <= Math.min(total, actual + delta); i++) {
+    rango.push(i);
+  }
+  return rango;
+}
+
+function irPagina(n) {
+  const total = Math.ceil(tramitesFiltrados.length / CARDS_PER_PAGE);
+  if (n < 1 || n > total) return;
+  paginaActual = n;
+  renderTramites();
+  renderPaginacion();
+  document.getElementById('tramites-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ══════════════════════════════════════════════
+//  MODAL — Ver detalle completo
+// ══════════════════════════════════════════════
+function abrirDetalle(idx) {
+  const t = tramitesFiltrados[idx];
+  if (!t) return;
+  const icon = CATEGORIA_ICONS[t.Categoria] || CATEGORIA_ICONS.default;
+  const reqs = t.Requisitos
+    ? t.Requisitos.split(',').map(function(r) { return r.trim(); }).filter(Boolean)
+    : [];
+
+  const nombreEscaped = t.Nombre.replace(/'/g, "\\'");
+
+  var html =
+    '<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:1.2rem;flex-wrap:wrap;">' +
+      '<span style="font-size:1.6rem;line-height:1.3">' + icon + '</span>' +
+      '<h2 style="font-family:Arial,sans-serif;font-size:1.05rem;font-weight:600;color:var(--text);flex:1;line-height:1.4">' + t.Nombre + '</h2>' +
+      (t.Categoria ? '<span class="badge badge-active">' + t.Categoria + '</span>' : '') +
+    '</div>';
+
+  if (t.Descripcion) {
+    html +=
+      '<div class="detalle-seccion">' +
+        '<div class="meta-label" style="margin-bottom:.5rem">Descripción</div>' +
+        '<p style="font-family:Arial,sans-serif;font-size:.86rem;color:var(--muted);line-height:1.8">' + t.Descripcion + '</p>' +
+      '</div>';
+  }
+
+  if (reqs.length) {
+    html +=
+      '<div class="detalle-seccion">' +
+        '<div class="meta-label" style="margin-bottom:.6rem">📎 Requisitos necesarios</div>' +
+        '<ul style="font-family:Arial,sans-serif;font-size:.84rem;color:var(--text);padding-left:1.1rem;line-height:2.1">' +
+          reqs.map(function(r) { return '<li>' + r + '</li>'; }).join('') +
+        '</ul>' +
+      '</div>';
+  }
+
+  html +=
+    '<div style="margin-top:1.5rem;padding-top:1.2rem;border-top:1px solid var(--border)">' +
+      '<button class="btn btn-primary" style="width:100%;justify-content:center;padding:.85rem"' +
+        ' onclick="cerrarDetalle();abrirModal(\'' + nombreEscaped + '\')">' +
+        'Solicitar este trámite →' +
+      '</button>' +
+    '</div>';
+
+  document.getElementById('detalle-content').innerHTML = html;
+  document.getElementById('modal-detalle').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function cerrarDetalle() {
+  document.getElementById('modal-detalle').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ══════════════════════════════════════════════
+//  MODAL — Solicitar trámite (formulario)
 // ══════════════════════════════════════════════
 function abrirModal(nombre) {
   tramiteSeleccionado = nombre;
@@ -151,14 +326,10 @@ async function enviarSolicitudTramite() {
   const tel     = document.getElementById('m-tel').value.trim();
   const mensaje = document.getElementById('m-mensaje').value.trim();
 
-  if (!nombre || !email) {
-    alert('Por favor complete nombre y correo.');
-    return;
-  }
+  if (!nombre || !email) { alert('Por favor complete nombre y correo.'); return; }
 
   const payload = {
-    nombre,
-    email,
+    nombre, email,
     telefono: tel,
     tipo:     tramiteSeleccionado,
     mensaje:  mensaje || '(Sin comentarios adicionales)'
@@ -166,15 +337,15 @@ async function enviarSolicitudTramite() {
 
   if (CONTACTO_URL) {
     try { await fetch(CONTACTO_URL, { method: 'POST', body: JSON.stringify(payload) }); }
-    catch (e) { /* silencioso */ }
+    catch (e) {}
   }
 
-  ['m-nombre', 'm-email', 'm-tel', 'm-mensaje'].forEach(id => {
+  ['m-nombre', 'm-email', 'm-tel', 'm-mensaje'].forEach(function(id) {
     document.getElementById(id).value = '';
   });
 
   cerrarModal();
-  showToast('✓ Solicitud de "' + tramiteSeleccionado.substring(0, 30) + '..." enviada');
+  showToast('✓ Solicitud enviada correctamente');
 }
 
 // ══════════════════════════════════════════════
@@ -182,13 +353,21 @@ async function enviarSolicitudTramite() {
 // ══════════════════════════════════════════════
 async function loadAgenda() {
   const tbody = document.getElementById('agenda-tbody');
-  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem"><span class="spinner"></span> Cargando...</td></tr>';
+  var skRows  = '';
+  for (var i = 0; i < 5; i++) {
+    skRows += '<tr class="skeleton-row">';
+    for (var j = 0; j < 6; j++) {
+      skRows += '<td><div class="skel skel-line" style="margin:0;width:' + (60 + Math.random() * 30) + '%"></div></td>';
+    }
+    skRows += '</tr>';
+  }
+  tbody.innerHTML = skRows;
 
   try {
     const res = await fetch(AGENDA_URL + '?tab=Agenda');
     agendaData = await res.json();
   } catch (e) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem">⚠️ No se pudo conectar con Google Sheets. Verifique la URL en app.js.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem">⚠️ No se pudo conectar con Google Sheets.</td></tr>';
     return;
   }
 
@@ -199,7 +378,7 @@ function renderAgenda() {
   const q    = document.getElementById('searchAgenda').value.toLowerCase();
   const tipo = document.getElementById('filterTipo').value;
 
-  const list = agendaData.filter(a => {
+  const list = agendaData.filter(function(a) {
     const text = (a.Cliente + a.Tipo + a.Abogado).toLowerCase();
     return (!q || text.includes(q)) && (!tipo || a.Tipo === tipo);
   });
@@ -211,16 +390,16 @@ function renderAgenda() {
     return;
   }
 
-  tbody.innerHTML = list.map(a => `
-    <tr>
-      <td>${formatDate(a.Fecha)}</td>
-      <td>${a.Hora}</td>
-      <td>${a.Cliente}</td>
-      <td>${a.Tipo}</td>
-      <td>${a.Abogado}</td>
-      <td><span class="badge ${a.Estado === 'Confirmada' ? 'badge-active' : 'badge-pending'}">${a.Estado}</span></td>
-    </tr>
-  `).join('');
+  tbody.innerHTML = list.map(function(a) {
+    return '<tr>' +
+      '<td>' + formatDate(a.Fecha) + '</td>' +
+      '<td>' + a.Hora + '</td>' +
+      '<td>' + a.Cliente + '</td>' +
+      '<td>' + a.Tipo + '</td>' +
+      '<td>' + a.Abogado + '</td>' +
+      '<td><span class="badge ' + (a.Estado === 'Confirmada' ? 'badge-active' : 'badge-pending') + '">' + a.Estado + '</span></td>' +
+    '</tr>';
+  }).join('');
 }
 
 // ══════════════════════════════════════════════
@@ -241,12 +420,11 @@ async function enviarFormulario() {
   const payload = { nombre, email, telefono: tel, tipo, mensaje };
 
   if (CONTACTO_URL) {
-    try {
-      await fetch(CONTACTO_URL, { method: 'POST', body: JSON.stringify(payload) });
-    } catch (e) { /* silencioso */ }
+    try { await fetch(CONTACTO_URL, { method: 'POST', body: JSON.stringify(payload) }); }
+    catch (e) {}
   }
 
-  ['c-nombre', 'c-email', 'c-tel', 'c-mensaje'].forEach(id => {
+  ['c-nombre', 'c-email', 'c-tel', 'c-mensaje'].forEach(function(id) {
     document.getElementById(id).value = '';
   });
 
@@ -254,14 +432,13 @@ async function enviarFormulario() {
 }
 
 // ══════════════════════════════════════════════
-//  ESTADÍSTICAS (página Inicio)
+//  ESTADÍSTICAS
 // ══════════════════════════════════════════════
 function updateStats() {
   document.getElementById('stat-tramites').textContent = tramitesData.length || '—';
   document.getElementById('stat-citas').textContent    = agendaData.length   || '—';
-
-  const cats = new Set(tramitesData.map(t => t.Categoria).filter(Boolean));
-  document.getElementById('stat-areas').textContent   = cats.size || '—';
+  const cats = new Set(tramitesData.map(function(t) { return t.Categoria; }).filter(Boolean));
+  document.getElementById('stat-areas').textContent    = cats.size           || '—';
 }
 
 // ══════════════════════════════════════════════
@@ -271,7 +448,7 @@ function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg || '✓ Operación exitosa';
   t.style.display = 'block';
-  setTimeout(() => t.style.display = 'none', 3500);
+  setTimeout(function() { t.style.display = 'none'; }, 3500);
 }
 
 function formatDate(d) {
@@ -283,12 +460,12 @@ function formatDate(d) {
 // ══════════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', () => {
-  // Cerrar modal al hacer clic fuera
-  document.getElementById('modal-overlay').addEventListener('click', function (e) {
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('modal-overlay').addEventListener('click', function(e) {
     if (e.target === this) cerrarModal();
   });
-
-  // Iniciar stats con datos demo
+  document.getElementById('modal-detalle').addEventListener('click', function(e) {
+    if (e.target === this) cerrarDetalle();
+  });
   updateStats();
 });
