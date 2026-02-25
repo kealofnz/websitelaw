@@ -214,65 +214,7 @@
       </div>
     </div>
 
-    <!-- INSTRUCCIONES DE CONEXIÓN -->
-    <div style="max-width:680px; margin:2.5rem auto 0;">
-      <hr class="divider" style="margin-bottom:2rem">
-      <div class="section-label">Configuración</div>
-      <div class="section-title" style="font-size:1.2rem; margin-bottom:1rem">¿Cómo conectar tu Excel / Google Sheet?</div>
 
-      <div class="instructions">
-        <p style="margin-bottom:1rem; color:var(--text)"><strong>Paso 1 — Publicar la hoja como Web App:</strong></p>
-        <ol>
-          <li>Abre tu Google Sheet y ve a <strong style="color:var(--text)">Extensiones → Apps Script</strong></li>
-          <li>Pega el código de Apps Script que aparece más abajo</li>
-          <li>Haz clic en <strong style="color:var(--text)">Implementar → Nueva implementación</strong></li>
-          <li>Elige tipo: <strong style="color:var(--text)">Aplicación web</strong>, acceso: <em>Cualquier usuario</em></li>
-          <li>Copia la URL generada</li>
-        </ol>
-
-        <p style="margin-bottom:.8rem; color:var(--text)"><strong>Paso 2 — Pegar la URL en app.js:</strong></p>
-        <div class="code-block">// Al inicio de app.js reemplaza:
-const TRAMITES_URL = "TU_URL_APPS_SCRIPT_AQUI";
-const AGENDA_URL   = "TU_URL_APPS_SCRIPT_AQUI";
-const CONTACTO_URL = "TU_URL_APPS_SCRIPT_AQUI";</div>
-
-        <p style="margin-bottom:.8rem; color:var(--text)"><strong>Código Apps Script a pegar:</strong></p>
-        <div class="code-block">function doGet(e) {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet();
-  const tab   = e.parameter.tab || "Tramites";
-  const data  = sheet.getSheetByName(tab).getDataRange().getValues();
-  const keys  = data[0];
-  const rows  = data.slice(1).map(r =>
-    Object.fromEntries(keys.map((k,i) => [k, r[i]]))
-  );
-  return ContentService
-    .createTextOutput(JSON.stringify(rows))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-
-function doPost(e) {
-  const body  = JSON.parse(e.postData.contents);
-  const sheet = SpreadsheetApp.getActiveSpreadsheet()
-                  .getSheetByName("Contacto");
-  sheet.appendRow([
-    new Date(), body.nombre, body.email,
-    body.telefono, body.tipo, body.mensaje
-  ]);
-  return ContentService
-    .createTextOutput(JSON.stringify({ok:true}))
-    .setMimeType(ContentService.MimeType.JSON);
-}</div>
-
-        <p>Las columnas de tu Excel deben llamarse exactamente:
-          <strong style="color:var(--text)">Nombre, Categoria, Descripcion, Requisitos</strong>
-          (pestaña <strong style="color:var(--text)">Tramites</strong>) y
-          <strong style="color:var(--text)">Fecha, Hora, Cliente, Tipo, Abogado, Estado</strong>
-          (pestaña <strong style="color:var(--text)">Agenda</strong>).
-          Las solicitudes del botón "Solicitar trámite" se guardan en la pestaña
-          <strong style="color:var(--text)">Contacto</strong>.
-        </p>
-      </div>
-    </div>
 
   </section>
 </div><!-- /page-contacto -->
