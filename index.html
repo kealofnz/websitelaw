@@ -18,7 +18,7 @@
   <link rel="canonical" href="https://visiuris.netlify.app/" />
 
   <!-- ══════════════════════════════════════════
-       Open Graph — Redes sociales (Facebook, WhatsApp, LinkedIn)
+       Open Graph — Redes sociales
   ══════════════════════════════════════════ -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.visiuris.hn/" />
@@ -111,31 +111,94 @@
 <div class="page active" id="page-inicio">
 
   <div class="hero">
-    <div class="hero-badge">⚖ Servicios Legales</div>
-    <h1>Asesoría legal y Empresarial <span>clara y confiable</span><br>para cada caso</h1>
-    <p>Consulte los trámites disponibles, revise la agenda de citas y contáctenos directamente desde esta plataforma.</p>
+    <div class="hero-badge">⚖ Asesoría Corporativa</div>
+    <h1>Protegemos su empresa <span>antes que el riesgo</span><br>se vuelva litigio</h1>
+    <p>Identificamos, evaluamos y gestionamos los riesgos jurídicos que enfrenta su empresa en Honduras, con asesoría preventiva, estructuración corporativa y acompañamiento legal estratégico.</p>
     <div class="hero-ctas">
-      <a href="#" class="btn btn-primary" onclick="showPage('tramites', null)">Ver Trámites</a>
+      <a href="#" class="btn btn-primary" onclick="showPage('tramites', null)">Ver Servicios</a>
       <a href="#" class="btn btn-outline" onclick="showPage('contacto', null)">Solicitar Consulta</a>
     </div>
   </div>
 
+  <!-- ══════════════════════════════════════
+       MISIÓN Y VISIÓN
+  ══════════════════════════════════════ -->
   <section>
-    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem;">
-      <div class="card" style="text-align:center; padding:2rem 1.5rem;">
-        <div style="font-size:2rem; margin-bottom:.5rem">📋</div>
-        <div style="font-family:Arial; font-size:.85rem; color:var(--muted); margin-bottom:.3rem">Trámites disponibles</div>
-        <div id="stat-tramites" style="font-size:2rem; color:var(--gold)">—</div>
+    <div class="section-label">Quiénes somos</div>
+    <div class="section-title">Nuestro Propósito</div>
+    <div class="section-sub">El fundamento que orienta cada decisión que tomamos en nombre de nuestros clientes.</div>
+
+    <div class="mv-grid">
+
+      <div class="mv-card mv-mision">
+        <div class="mv-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 3v2M12 19v2M3 12h2M19 12h2"/>
+            <circle cx="12" cy="12" r="4" fill="currentColor" opacity="0.15"/>
+            <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="mv-label">Misión</div>
+        <h3>Asesoría legal que anticipa el riesgo</h3>
+        <p>Proveemos servicios jurídicos corporativos de alto valor a empresas que operan en Honduras, anticipando los riesgos legales en cada etapa de su negocio. Actuamos como aliados estratégicos, no como proveedores reactivos: nuestra intervención temprana protege el patrimonio, la continuidad operativa y la reputación de nuestros clientes.</p>
       </div>
-      <div class="card" style="text-align:center; padding:2rem 1.5rem;">
-        <div style="font-size:2rem; margin-bottom:.5rem">📅</div>
-        <div style="font-family:Arial; font-size:.85rem; color:var(--muted); margin-bottom:.3rem">Citas próximas</div>
-        <div id="stat-citas" style="font-size:2rem; color:var(--gold)">—</div>
+
+      <div class="mv-card mv-vision">
+        <div class="mv-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="4" fill="currentColor" opacity="0.15"/>
+            <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="mv-label">Visión</div>
+        <h3>Referencia en derecho empresarial en Honduras</h3>
+        <p>Consolidarnos como la firma de referencia en asesoría corporativa y gestión de riesgos jurídicos para empresas nacionales e internacionales con operaciones en Honduras, distinguiéndonos por la solidez técnica de nuestros profesionales, la ética en cada actuación y nuestra capacidad de acompañar al cliente desde la constitución hasta la expansión de su negocio.</p>
       </div>
-      <div class="card" style="text-align:center; padding:2rem 1.5rem;">
-        <div style="font-size:2rem; margin-bottom:.5rem">⚖️</div>
-        <div style="font-family:Arial; font-size:.85rem; color:var(--muted); margin-bottom:.3rem">Áreas de práctica</div>
-        <div id="stat-areas" style="font-size:2rem; color:var(--gold)">—</div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       ÁREAS DE PRÁCTICA
+  ══════════════════════════════════════ -->
+  <section class="section-areas">
+    <div class="section-label">Especialidades</div>
+    <div class="section-title">Áreas de Práctica</div>
+    <div class="section-sub">Cobertura jurídica integral para cada dimensión de su empresa.</div>
+
+    <div class="areas-grid">
+      <div class="area-item">
+        <span class="area-icon">🏢</span>
+        <div class="area-name">Derecho Mercantil</div>
+        <div class="area-desc">Constitución de sociedades, contratos comerciales y estructuración corporativa.</div>
+      </div>
+      <div class="area-item">
+        <span class="area-icon">👷</span>
+        <div class="area-name">Derecho Laboral</div>
+        <div class="area-desc">Cumplimiento normativo, contratos de trabajo y gestión de conflictos laborales.</div>
+      </div>
+      <div class="area-item">
+        <span class="area-icon">⚖️</span>
+        <div class="area-name">Derecho Civil</div>
+        <div class="area-desc">Contratos civiles, obligaciones, bienes inmuebles y litigios patrimoniales.</div>
+      </div>
+      <div class="area-item">
+        <span class="area-icon">👨‍👩‍👧</span>
+        <div class="area-name">Derecho Familiar</div>
+        <div class="area-desc">Sucesiones, patrimonio familiar y protección de activos en contexto familiar.</div>
+      </div>
+      <div class="area-item">
+        <span class="area-icon">🔒</span>
+        <div class="area-name">Derecho Penal</div>
+        <div class="area-desc">Defensa corporativa ante delitos económicos, fraude y compliance penal.</div>
+      </div>
+      <div class="area-item area-item-cta">
+        <span class="area-icon">→</span>
+        <div class="area-name">¿Necesita asesoría?</div>
+        <div class="area-desc">Contáctenos y evaluaremos su caso sin compromiso.</div>
+        <a href="#" class="btn btn-outline" style="margin-top:.75rem;font-size:.78rem;padding:.5rem 1rem" onclick="showPage('contacto', null)">Consultar ahora</a>
       </div>
     </div>
   </section>
@@ -300,8 +363,6 @@
       </div>
     </div>
 
- 
-
   </section>
 </div><!-- /page-contacto -->
 
@@ -315,7 +376,6 @@
   &copy; 2025 VIS IURIS &mdash; Firma Legal Empresarial &mdash; Honduras &mdash; Todos los derechos reservados
 </footer>
 
-<!-- JavaScript externo -->
 <script src="app.js"></script>
 
 </body>
