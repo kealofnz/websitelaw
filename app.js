@@ -35,14 +35,12 @@ const CATEGORIA_ICONS = {
 //  NAVEGACIÓN
 // ══════════════════════════════════════════════
 function showPage(id, anchor, event) {
-  // Prevenir que href="#" haga scroll o modifique la URL
   if (event) event.preventDefault();
 
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
 
   document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-  // Si anchor es un elemento del DOM lo marcamos; si no, buscamos por id de página
   if (anchor && anchor.classList) {
     anchor.classList.add('active');
   } else {
@@ -103,7 +101,6 @@ async function loadTramites() {
   sel.innerHTML = '<option value="">Todas las categorías</option>'
     + cats.map(c => '<option value="' + c + '">' + c + '</option>').join('');
 
-  updateStats();
   filtrarYPaginar();
 }
 
@@ -144,7 +141,6 @@ function renderTramites() {
     return buildCard(t, inicio + i);
   }).join('');
 
-  // Animación de entrada escalonada
   container.querySelectorAll('.tramite-card').forEach(function(card, i) {
     card.style.opacity = '0';
     card.style.transform = 'translateY(14px)';
@@ -159,7 +155,6 @@ function renderTramites() {
 function buildCard(t, idx) {
   const icon = CATEGORIA_ICONS[t.Categoria] || CATEGORIA_ICONS.default;
 
-  // ── Descripción con truncado ──
   const desc      = (t.Descripcion || '').trim();
   const descCorta = desc.length > DESC_MAX_CHARS;
   var descHTML    = '';
@@ -171,7 +166,6 @@ function buildCard(t, idx) {
     descHTML = '<p class="card-desc">' + texto + boton + '</p>';
   }
 
-  // ── Requisitos con truncado ──
   const reqs      = t.Requisitos ? t.Requisitos.split(',').map(function(r) { return r.trim(); }).filter(Boolean) : [];
   const reqCortos = reqs.length > REQ_MAX_ITEMS;
   var reqHTML     = '';
@@ -445,16 +439,6 @@ async function enviarFormulario() {
 }
 
 // ══════════════════════════════════════════════
-//  ESTADÍSTICAS
-// ══════════════════════════════════════════════
-function updateStats() {
-  document.getElementById('stat-tramites').textContent = tramitesData.length || '—';
-  document.getElementById('stat-citas').textContent    = agendaData.length   || '—';
-  const cats = new Set(tramitesData.map(function(t) { return t.Categoria; }).filter(Boolean));
-  document.getElementById('stat-areas').textContent    = cats.size           || '—';
-}
-
-// ══════════════════════════════════════════════
 //  HELPERS
 // ══════════════════════════════════════════════
 function showToast(msg) {
@@ -480,5 +464,4 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('modal-detalle').addEventListener('click', function(e) {
     if (e.target === this) cerrarDetalle();
   });
-  updateStats();
 });
