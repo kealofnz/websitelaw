@@ -131,7 +131,7 @@ nav {
 .hero p {
   font-family: 'Arial', sans-serif;
   color: var(--muted);
-  max-width: 520px;
+  max-width: 560px;
   margin: 0 auto 2rem;
   font-size: 0.95rem;
   line-height: 1.7;
@@ -205,6 +205,167 @@ section {
   color: var(--muted);
   font-size: 0.88rem;
   margin-bottom: 2rem;
+}
+
+/* ══════════════════════════════════════════
+   MISIÓN Y VISIÓN
+══════════════════════════════════════════ */
+.mv-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.mv-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem 1.75rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.25s, transform 0.25s;
+}
+
+.mv-card:hover {
+  transform: translateY(-2px);
+}
+
+.mv-mision {
+  border-top: 3px solid var(--gold);
+}
+
+.mv-vision {
+  border-top: 3px solid rgba(201,168,76,0.4);
+}
+
+.mv-vision:hover {
+  border-top-color: var(--gold);
+}
+
+/* Decoración de fondo sutil */
+.mv-card::after {
+  content: '';
+  position: absolute;
+  bottom: -30px;
+  right: -30px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.mv-icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 1.2rem;
+  color: var(--gold);
+  opacity: 0.8;
+}
+
+.mv-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.mv-label {
+  font-family: 'Arial', sans-serif;
+  font-size: 0.68rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+}
+
+.mv-card h3 {
+  font-size: 1rem;
+  font-weight: normal;
+  color: var(--text);
+  margin-bottom: 0.9rem;
+  line-height: 1.4;
+  font-family: 'Georgia', serif;
+}
+
+.mv-card p {
+  font-family: 'Arial', sans-serif;
+  font-size: 0.84rem;
+  color: var(--muted);
+  line-height: 1.85;
+}
+
+/* ══════════════════════════════════════════
+   ÁREAS DE PRÁCTICA
+══════════════════════════════════════════ */
+.section-areas {
+  background: var(--dark);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  max-width: 100% !important;
+  padding: 3.5rem 2rem;
+}
+
+.section-areas > * {
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-areas .section-label,
+.section-areas .section-title,
+.section-areas .section-sub {
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.areas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.area-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.4rem 1.2rem;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.area-item:hover {
+  border-color: rgba(201,168,76,0.3);
+  transform: translateY(-2px);
+}
+
+.area-item-cta {
+  border-style: dashed;
+  display: flex;
+  flex-direction: column;
+}
+
+.area-icon {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 0.75rem;
+  line-height: 1;
+}
+
+.area-name {
+  font-family: 'Arial', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+}
+
+.area-desc {
+  font-family: 'Arial', sans-serif;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.6;
 }
 
 /* ══════════════════════════════════════════
@@ -538,37 +699,6 @@ footer a { color: var(--gold); text-decoration: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ══════════════════════════════════════════
-   INSTRUCTIONS BOX
-══════════════════════════════════════════ */
-.code-block {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem;
-  font-family: monospace;
-  font-size: 0.76rem;
-  color: #9cdcfe;
-  white-space: pre-wrap;
-  overflow-x: auto;
-  margin-bottom: 1.5rem;
-}
-
-.instructions {
-  font-family: 'Arial', sans-serif;
-  font-size: 0.87rem;
-  line-height: 1.9;
-  color: var(--muted);
-}
-
-.instructions ol {
-  padding-left: 1.2rem;
-  margin-bottom: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-/* ══════════════════════════════════════════
    PAGES (SPA routing)
 ══════════════════════════════════════════ */
 .page { display: none; }
@@ -595,10 +725,13 @@ footer a { color: var(--gold); text-decoration: none; }
   .hamburger { display: flex; }
   .hero { padding: 3rem 1.5rem 2.5rem; }
   .cards-grid { grid-template-columns: 1fr; }
+  .mv-grid { grid-template-columns: 1fr; }
+  .areas-grid { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 600px) {
   .form-grid { grid-template-columns: 1fr; }
+  .areas-grid { grid-template-columns: 1fr; }
 }
 
 
@@ -706,7 +839,7 @@ footer a { color: var(--gold); text-decoration: none; }
   line-height: 1.75;
 }
 
-/* Botones SIEMPRE al fondo — nunca desaparecen */
+/* Botones SIEMPRE al fondo */
 .card-actions {
   flex-shrink: 0;
   display: flex;
@@ -733,7 +866,7 @@ footer a { color: var(--gold); text-decoration: none; }
 }
 .btn-ver-mas:hover { color: var(--gold-light); }
 
-/* Botones pequeños en tarjeta */
+/* Botones pequeños */
 .btn-sm {
   padding: 0.45rem 1rem;
   font-size: 0.8rem;
@@ -765,11 +898,9 @@ footer a { color: var(--gold); text-decoration: none; }
   position: relative;
   max-height: 88vh;
   overflow-y: auto;
-  /* Scroll suave */
   scroll-behavior: smooth;
 }
 
-/* Scrollbar personalizado dentro del modal */
 .modal-detalle-box::-webkit-scrollbar { width: 4px; }
 .modal-detalle-box::-webkit-scrollbar-track { background: transparent; }
 .modal-detalle-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
