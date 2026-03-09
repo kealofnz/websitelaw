@@ -18,35 +18,13 @@
   <link rel="canonical" href="https://visiuris.netlify.app/" />
 
   <!-- ══════════════════════════════════════════
-       FAVICON — Icono de pestaña (múltiples tamaños)
-  ══════════════════════════════════════════ -->
-  <!-- Favicon estándar (navegadores de escritorio) -->
-  <link rel="icon" type="image/jpeg"
-        href="https://res.cloudinary.com/du83rwgxa/image/upload/w_32,h_32,c_fill,g_auto,r_6/v1773082025/LOGO_VIS_IURIS_tzlx2o.jpg"
-        sizes="32x32" />
-  <!-- Favicon HD (pantallas retina) -->
-  <link rel="icon" type="image/jpeg"
-        href="https://res.cloudinary.com/du83rwgxa/image/upload/w_64,h_64,c_fill,g_auto,r_8/v1773082025/LOGO_VIS_IURIS_tzlx2o.jpg"
-        sizes="64x64" />
-  <!-- Apple Touch Icon (iOS, cuando guardan en pantalla de inicio) -->
-  <link rel="apple-touch-icon"
-        href="https://res.cloudinary.com/du83rwgxa/image/upload/w_180,h_180,c_fill,g_auto,r_max/v1773082025/LOGO_VIS_IURIS_tzlx2o.jpg"
-        sizes="180x180" />
-  <!-- Android / PWA -->
-  <link rel="icon" type="image/jpeg"
-        href="https://res.cloudinary.com/du83rwgxa/image/upload/w_192,h_192,c_fill,g_auto/v1773082025/LOGO_VIS_IURIS_tzlx2o.jpg"
-        sizes="192x192" />
-
-  <!-- ══════════════════════════════════════════
-       Open Graph — Redes sociales (Facebook, WhatsApp, LinkedIn)
+       Open Graph — Redes sociales
   ══════════════════════════════════════════ -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.visiuris.hn/" />
   <meta property="og:title" content="VIS IURIS | Firma Legal Empresarial en Honduras" />
   <meta property="og:description" content="Firma legal especializada en derecho empresarial y asuntos corporativos. Servicios jurídicos a nivel nacional en Honduras." />
-  <!-- OG image: versión limpia 1200×630, sin filtros artísticos -->
-  <meta property="og:image"
-        content="https://res.cloudinary.com/du83rwgxa/image/upload/w_1200,h_630,c_fill,g_auto,b_rgb:0f1117/v1773082025/LOGO_VIS_IURIS_tzlx2o.jpg" />
+  <meta property="og:image" content="https://www.visiuris.hn/og-image.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:locale" content="es_HN" />
@@ -58,8 +36,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="VIS IURIS | Firma Legal Empresarial en Honduras" />
   <meta name="twitter:description" content="Firma legal especializada en derecho empresarial y asuntos corporativos a nivel nacional en Honduras." />
-  <meta name="twitter:image"
-        content="https://res.cloudinary.com/du83rwgxa/image/upload/w_1200,h_630,c_fill,g_auto,b_rgb:0f1117/v1773082025/LOGO_VIS_IURIS_tzlx2o.jpg" />
+  <meta name="twitter:image" content="https://www.visiuris.hn/og-image.jpg" />
 
   <!-- ══════════════════════════════════════════
        Schema.org — Datos estructurados (Google)
@@ -72,8 +49,8 @@
     "alternateName": "VIS IURIS Firma Legal",
     "description": "Firma legal especializada en derecho empresarial, asuntos corporativos, derecho civil, laboral, mercantil y familiar en Honduras.",
     "url": "https://www.visiuris.hn",
-    "logo": "https://res.cloudinary.com/du83rwgxa/image/upload/w_512,h_512,c_fill,g_auto/v1773082025/LOGO_VIS_IURIS_tzlx2o.jpg",
-    "image": "https://res.cloudinary.com/du83rwgxa/image/upload/w_1200,h_630,c_fill,g_auto,b_rgb:0f1117/v1773082025/LOGO_VIS_IURIS_tzlx2o.jpg",
+    "logo": "https://www.visiuris.hn/logo.png",
+    "image": "https://www.visiuris.hn/og-image.jpg",
     "telephone": "",
     "email": "",
     "areaServed": {
@@ -109,12 +86,9 @@
 ══════════════════════════════════════════ -->
 <nav>
   <div class="logo">
-    <!-- Logo imagen: versión limpia sin filtro artístico, tamaño 36px -->
-    <img
-      src="https://res.cloudinary.com/du83rwgxa/image/upload/w_72,h_72,c_fill,g_auto/v1773082025/LOGO_VIS_IURIS_tzlx2o.jpg"
-      alt="VIS IURIS Logo"
-      class="nav-logo-img"
-    />
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 4l5 2.18V11c0 3.5-2.33 6.79-5 7.93C9.33 17.79 7 14.5 7 11V7.18L12 5z"/>
+    </svg>
     Despacho Jurídico VIS IURIS
   </div>
 
@@ -137,31 +111,89 @@
 <div class="page active" id="page-inicio">
 
   <div class="hero">
-    <div class="hero-badge">⚖ Servicios Legales</div>
-    <h1>Asesoría legal y Empresarial <span>clara y confiable</span><br>para cada caso</h1>
-    <p>Consulte los trámites disponibles, revise la agenda de citas y contáctenos directamente desde esta plataforma.</p>
+    <div class="hero-badge">⚖ Asesoría Corporativa</div>
+    <h1>Protegemos su empresa <span>antes que el riesgo</span><br>se vuelva litigio</h1>
+    <p>Identificamos, evaluamos y gestionamos los riesgos jurídicos que enfrenta su empresa en Honduras, con asesoría preventiva, estructuración corporativa y acompañamiento legal estratégico.</p>
     <div class="hero-ctas">
-      <a href="#" class="btn btn-primary" onclick="showPage('tramites', null)">Ver Trámites</a>
+      <a href="#" class="btn btn-primary" onclick="showPage('tramites', null)">Ver Servicios</a>
       <a href="#" class="btn btn-outline" onclick="showPage('contacto', null)">Solicitar Consulta</a>
     </div>
   </div>
 
+  <!-- ══════════════════════════════════════
+       MISIÓN Y VISIÓN
+  ══════════════════════════════════════ -->
   <section>
-    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem;">
-      <div class="card" style="text-align:center; padding:2rem 1.5rem;">
-        <div style="font-size:2rem; margin-bottom:.5rem">📋</div>
-        <div style="font-family:Arial; font-size:.85rem; color:var(--muted); margin-bottom:.3rem">Trámites disponibles</div>
-        <div id="stat-tramites" style="font-size:2rem; color:var(--gold)">—</div>
+    <div class="section-label">Quiénes somos</div>
+    <div class="section-title">Nuestro Propósito</div>
+    <div class="section-sub">El fundamento que orienta cada decisión que tomamos en nombre de nuestros clientes.</div>
+
+    <div class="mv-grid">
+
+      <div class="mv-card mv-mision">
+        <div class="mv-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 3v2M12 19v2M3 12h2M19 12h2"/>
+            <circle cx="12" cy="12" r="4" fill="currentColor" opacity="0.15"/>
+            <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="mv-label">Misión</div>
+        <h3>Asesoría legal que anticipa el riesgo</h3>
+        <p>Proveemos servicios jurídicos corporativos de alto valor a empresas que operan en Honduras, anticipando los riesgos legales en cada etapa de su negocio. Actuamos como aliados estratégicos, no como proveedores reactivos: nuestra intervención temprana protege el patrimonio, la continuidad operativa y la reputación de nuestros clientes.</p>
       </div>
-      <div class="card" style="text-align:center; padding:2rem 1.5rem;">
-        <div style="font-size:2rem; margin-bottom:.5rem">📅</div>
-        <div style="font-family:Arial; font-size:.85rem; color:var(--muted); margin-bottom:.3rem">Citas próximas</div>
-        <div id="stat-citas" style="font-size:2rem; color:var(--gold)">—</div>
+
+      <div class="mv-card mv-vision">
+        <div class="mv-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="4" fill="currentColor" opacity="0.15"/>
+            <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="mv-label">Visión</div>
+        <h3>Referencia en derecho empresarial en Honduras</h3>
+        <p>Consolidarnos como la firma de referencia en asesoría corporativa y gestión de riesgos jurídicos para empresas nacionales e internacionales con operaciones en Honduras, distinguiéndonos por la solidez técnica de nuestros profesionales, la ética en cada actuación y nuestra capacidad de acompañar al cliente desde la constitución hasta la expansión de su negocio.</p>
       </div>
-      <div class="card" style="text-align:center; padding:2rem 1.5rem;">
-        <div style="font-size:2rem; margin-bottom:.5rem">⚖️</div>
-        <div style="font-family:Arial; font-size:.85rem; color:var(--muted); margin-bottom:.3rem">Áreas de práctica</div>
-        <div id="stat-areas" style="font-size:2rem; color:var(--gold)">—</div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       ÁREAS DE PRÁCTICA
+  ══════════════════════════════════════ -->
+  <section class="section-areas">
+    <div class="section-label">Especialidades</div>
+    <div class="section-title">Áreas de Práctica</div>
+    <div class="section-sub">Cobertura jurídica integral para cada dimensión de su empresa.</div>
+
+    <div class="areas-grid">
+      <div class="area-item">
+        <span class="area-icon">🏢</span>
+        <div class="area-name">Derecho Mercantil</div>
+        <div class="area-desc">Constitución de sociedades, contratos comerciales y estructuración corporativa.</div>
+      </div>
+      <div class="area-item">
+        <span class="area-icon">⚖️</span>
+        <div class="area-name">Derecho Tributario</div>
+        <div class="area-desc">Cumplimiento normativo, ISV/ISR, Compliance Tributario.</div>
+      </div>
+      <div class="area-item">
+        <span class="area-icon">⚖️</span>
+        <div class="area-name">Derecho Civil</div>
+        <div class="area-desc">Contratos civiles, obligaciones, bienes inmuebles y litigios patrimoniales.</div>
+      </div>
+      <div class="area-item">
+        <span class="area-icon">👨‍👩‍👧</span>
+        <div class="area-name">Derecho Inquilinato</div>
+        <div class="area-desc">Contratos, Ajustes de alquiler y derechos de inquilinos.</div>
+      </div>
+      <div class="area-item area-item-cta">
+        <span class="area-icon">→</span>
+        <div class="area-name">¿Necesita asesoría?</div>
+        <div class="area-desc">Contáctenos y evaluaremos su caso sin compromiso.</div>
+        <a href="#" class="btn btn-outline" style="margin-top:.75rem;font-size:.78rem;padding:.5rem 1rem" onclick="showPage('contacto', null)">Consultar ahora</a>
       </div>
     </div>
   </section>
@@ -339,7 +371,6 @@
   &copy; 2025 VIS IURIS &mdash; Firma Legal Empresarial &mdash; Honduras &mdash; Todos los derechos reservados
 </footer>
 
-<!-- JavaScript externo -->
 <script src="app.js"></script>
 
 </body>
